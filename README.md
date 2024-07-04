@@ -1,1 +1,0 @@
-tourmed app atualizador
