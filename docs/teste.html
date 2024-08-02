@@ -1,123 +1,111 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tela de Login com jQuery UI</title>
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    <title>Feedbacks</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            background-color: #f0f4f8;
             margin: 0;
-            background-color: #f0f0f0;
+            padding: 0;
         }
-        .login-container {
-            width: 300px;
+        .header {
+            background-color: #4a90e2;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+        .feedback-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 60px;
             padding: 20px;
-            background-color: #fff;
+        }
+        .feedback-category {
+            background-color: white;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 15px;
+            width: 30%;
         }
-        .login-container h2 {
+        .feedback-category h2 {
             margin-top: 0;
-            text-align: center;
         }
-        .login-container label {
-            display: block;
-            margin: 10px 0 5px;
+        .feedback-item {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .login-container input[type="text"], .login-container input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
+        .feedback-item:last-child {
+            border-bottom: none;
         }
-        .login-container button {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            background-color: #007bff;
+        .like-button {
+            background-color: #4a90e2;
             color: white;
-            font-size: 16px;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
             cursor: pointer;
-        }
-        .login-container button:hover {
-            background-color: #0056b3;
-        }
-        #slider {
-            margin: 20px 0;
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <h2>Login</h2>
-        <form id="login-form">
-            <label for="username">Usuário:</label>
-            <input type="text" id="username" name="username" required>
-            
-            <label for="password">Senha:</label>
-            <input type="password" id="password" name="password" required>
-            
-            <div id="slider"></div>
-            <p>Escolha um nível de segurança: <span id="slider-value"></span></p>
-            
-            <button type="submit">Entrar</button>
-        </form>
+    <div class="header">
+        <h1>Feedbacks</h1>
+        <button onclick="window.close()">Fechar</button>
     </div>
-
-    <div id="error-dialog" title="Erro de Login" style="display:none;">
-        <p>Nome de usuário ou senha incorretos. Tente novamente.</p>
+    <div class="feedback-container">
+        <div class="feedback-category" id="queBom">
+            <h2>Que Bom</h2>
+            <!-- Feedback items will be injected here -->
+        </div>
+        <div class="feedback-category" id="queMal">
+            <h2>Que Mal</h2>
+            <!-- Feedback items will be injected here -->
+        </div>
+        <div class="feedback-category" id="queTal">
+            <h2>Que Tal</h2>
+            <!-- Feedback items will be injected here -->
+        </div>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
-        $(function() {
-            // Inicializa o slider
-            $("#slider").slider({
-                range: "min",
-                value: 50,
-                min: 0,
-                max: 100,
-                slide: function(event, ui) {
-                    $("#slider-value").text(ui.value);
-                }
-            });
-            $("#slider-value").text($("#slider").slider("value"));
+        function addFeedback(category, feedbackText, likes) {
+            const categoryElement = document.getElementById(category);
+            const feedbackItem = document.createElement('div');
+            feedbackItem.className = 'feedback-item';
+            feedbackItem.innerHTML = `
+                <span>${feedbackText}</span>
+                <span>
+                    <span>${likes} Likes</span>
+                    <button class="like-button" onclick="likeFeedback(this)">Like</button>
+                </span>
+            `;
+            categoryElement.appendChild(feedbackItem);
+        }
 
-            // Inicializa o diálogo de erro
-            $("#error-dialog").dialog({
-                autoOpen: false,
-                modal: true,
-                buttons: {
-                    "Ok": function() {
-                        $(this).dialog("close");
-                    }
-                }
-            });
+        function likeFeedback(button) {
+            const likesSpan = button.previousElementSibling;
+            let likes = parseInt(likesSpan.textContent);
+            likesSpan.textContent = `${likes + 1} Likes`;
+            // Optional: Send like data to the server or update local storage
+        }
 
-            $("#login-form").submit(function(event) {
-                event.preventDefault();
-                // Simular validação do formulário
-                var username = $("#username").val();
-                var password = $("#password").val();
-
-                if (username !== "admin" || password !== "password") {
-                    // Exibe o diálogo de erro se as credenciais forem inválidas
-                    $("#error-dialog").dialog("open");
-                } else {
-                    // Aqui você pode adicionar código para redirecionar o usuário após o login
-                    alert("Login bem-sucedido!");
-                }
-            });
-        });
+        // Add sample feedbacks
+        addFeedback('queBom', 'Excelente atendimento!', 10);
+        addFeedback('queBom', 'Adorei a interface.', 8);
+        addFeedback('queMal', 'Demorou muito para carregar.', 5);
+        addFeedback('queMal', 'A interface é confusa.', 3);
+        addFeedback('queTal', 'Poderia ter mais opções de filtragem.', 7);
+        addFeedback('queTal', 'Seria bom ter um chat ao vivo.', 9);
     </script>
 </body>
 </html>
