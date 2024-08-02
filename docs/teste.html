@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tela de Login com jQuery UI</title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .login-container {
+            width: 300px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .login-container h2 {
+            margin-top: 0;
+            text-align: center;
+        }
+        .login-container label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        .login-container input[type="text"], .login-container input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .login-container button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .login-container button:hover {
+            background-color: #0056b3;
+        }
+        #slider {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form id="login-form">
+            <label for="username">Usuário:</label>
+            <input type="text" id="username" name="username" required>
+            
+            <label for="password">Senha:</label>
+            <input type="password" id="password" name="password" required>
+            
+            <div id="slider"></div>
+            <p>Escolha um nível de segurança: <span id="slider-value"></span></p>
+            
+            <button type="submit">Entrar</button>
+        </form>
+    </div>
+
+    <div id="error-dialog" title="Erro de Login" style="display:none;">
+        <p>Nome de usuário ou senha incorretos. Tente novamente.</p>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $(function() {
+            // Inicializa o slider
+            $("#slider").slider({
+                range: "min",
+                value: 50,
+                min: 0,
+                max: 100,
+                slide: function(event, ui) {
+                    $("#slider-value").text(ui.value);
+                }
+            });
+            $("#slider-value").text($("#slider").slider("value"));
+
+            // Inicializa o diálogo de erro
+            $("#error-dialog").dialog({
+                autoOpen: false,
+                modal: true,
+                buttons: {
+                    "Ok": function() {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $("#login-form").submit(function(event) {
+                event.preventDefault();
+                // Simular validação do formulário
+                var username = $("#username").val();
+                var password = $("#password").val();
+
+                if (username !== "admin" || password !== "password") {
+                    // Exibe o diálogo de erro se as credenciais forem inválidas
+                    $("#error-dialog").dialog("open");
+                } else {
+                    // Aqui você pode adicionar código para redirecionar o usuário após o login
+                    alert("Login bem-sucedido!");
+                }
+            });
+        });
+    </script>
+</body>
+</html>
